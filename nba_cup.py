@@ -59,10 +59,11 @@ class Team:
         self.defeated_by.remove(opponent)
         
 class Game:
-    def __init__(self, local, visitant, played, score=[]):
+    def __init__(self, local, visitant, played, score=[], OT=False):
         self.local=local
         self.visitant=visitant
         self.played=played
+        self.OT=OT
         if played:
             self.points_local = score[0]
             self.points_visitant = score[1]
@@ -77,7 +78,10 @@ class Game:
         else:
             return self.visitant
     def point_difference(self):
-        return abs(self.points_local - self.points_visitant)
+        if self.OT:
+            return 0
+        else:
+            return abs(self.points_local - self.points_visitant)
     
 class Group:
     def __init__(self, conference, name, teams, games_played, games_to_play, team_dic):
@@ -262,14 +266,14 @@ group_east_A = Group("East", "A", [team_dic[team] for team in teams_A_East],
 #EAST GROUP B 
 teams_B_East=["MIL","DET","MIA","TOR","IND"]
 
-games_played_east_B=[Game("DET","MIA", True, [123,121]),
+games_played_east_B=[Game("DET","MIA", True, [123,121],True),
                       Game("MIL","TOR", True, [99,85]),
                       Game("IND","MIA", True, [111,124]),
                       Game("TOR","DET", True, [95,99]),
-                      Game("MIL","IND", True, [129,117])]
+                      Game("MIL","IND", True, [129,117]),
+                      Game("MIA","MIL", True, [103,106])]
 
-games_to_play_east_B=[Game("MIA","MIL", False),
-                      Game("IND","DET", False),
+games_to_play_east_B=[Game("IND","DET", False),
                       Game("MIA","TOR", False),
                       Game("DET","MIL", False),
                       Game("TOR","IND", False)]
@@ -285,10 +289,10 @@ games_played_east_C=[Game("BOS","ATL", True, [116,117]),
                       Game("CLE","CHI", True, [144,126]),
                       Game("BOS","CLE", True, [120,117]),
                       Game("WAS","BOS", True, [96,108]),
-                      Game("CHI","ATL", True, [136,122])]
+                      Game("CHI","ATL", True, [136,122]),
+                      Game("WAS","CHI", True, [108,127])]
 
-games_to_play_east_C=[Game("WAS","CHI", False),
-                      Game("ATL","CLE", False),
+games_to_play_east_C=[Game("ATL","CLE", False),
                       Game("CHI","BOS", False),
                       Game("CLE","WAS", False)]
 group_east_C = Group("East", "C", [team_dic[team] for team in teams_C_East],
@@ -301,12 +305,12 @@ teams_A_West=["MIN","POR","LAC","HOU","SAC"]
 
 games_played_A_West=[Game("POR","MIN", True, [122,108]),
                       Game("HOU","LAC", True, [125,104]),
-                      Game("SAC","MIN", True, [126,130]),
+                      Game("SAC","MIN", True, [126,130],True),
                       Game("HOU","POR", True, [116,88]),
-                      Game("LAC","SAC", True, [104,88])]
+                      Game("LAC","SAC", True, [104,88]),
+                      Game("MIN","HOU", True, [111,117],True)]
 
-games_to_play_A_West=[Game("MIN","HOU", False),
-                      Game("MIN","LAC", False),
+games_to_play_A_West=[Game("MIN","LAC", False),
                       Game("POR","SAC", False),
                       Game("SAC","HOU", False),
                       Game("LAC","POR", False)]
@@ -322,11 +326,11 @@ games_played_B_West=[Game("UTA","PHX", True, [112,120]),
                       Game("SAS","LAL", True, [115,120]),
                       Game("OKC","PHX", True, [99,83]),
                       Game("SAS","OKC", True, [110,104]),
-                      Game("LAL","UTA", True, [124,118])]
+                      Game("LAL","UTA", True, [124,118]),
+                      Game("UTA","SAS", True, [115,128]),
+                      Game("LAL","PHX", True, [100,127])]
 
-games_to_play_B_West=[Game("UTA","SAS", False),
-                      Game("LAL","PHX", False),
-                      Game("LAL","OKC", False),
+games_to_play_B_West=[Game("LAL","OKC", False),
                       Game("OKC","UTA", False),
                       Game("PHX","SAS", False)]
 group_B_West = Group("West", "B", [team_dic[team] for team in teams_B_West],
@@ -353,26 +357,26 @@ group_C_West = Group("West", "C", [team_dic[team] for team in teams_C_West],
 
 
 
-#group_east_A.print_leaderboard()
+group_east_A.print_leaderboard()
 #group_east_A.possibilities(group_east_A.games_to_play, "IF    ")      
-#group_east_B.print_leaderboard()
+group_east_B.print_leaderboard()
 #group_east_B.possibilities(group_east_B.games_to_play, "IF    ")  
-#group_east_C.print_leaderboard()
+group_east_C.print_leaderboard()
 #group_east_C.possibilities(group_east_C.games_to_play, "IF    ") 
-#group_A_West.print_leaderboard()
+group_A_West.print_leaderboard()
 #group_A_West.possibilities(group_A_West.games_to_play, "IF    ")
-#group_B_West.print_leaderboard()
+group_B_West.print_leaderboard()
 #group_B_West.possibilities(group_B_West.games_to_play, "IF    ")
-#group_C_West.print_leaderboard()   
+group_C_West.print_leaderboard()   
 #group_C_West.possibilities(group_C_West.games_to_play, "IF    ")        
 
 
-teamsEast=teams_A_East + teams_B_East + teams_C_East
-group_EAST= Group("EAST","",[team_dic[team] for team in teamsEast],[],[],
-                  team_dic)
-group_EAST.print_leaderboard()  
+#teamsEast=teams_A_East + teams_B_East + teams_C_East
+#group_EAST= Group("EAST","",[team_dic[team] for team in teamsEast],[],[],
+#                  team_dic)
+#group_EAST.print_leaderboard()  
 
-teamsWest=teams_A_West + teams_B_West + teams_C_West
-group_WEST= Group("WEST","",[team_dic[team] for team in teamsWest],[],[],
-                  team_dic)
-group_WEST.print_leaderboard() 
+#teamsWest=teams_A_West + teams_B_West + teams_C_West
+#group_WEST= Group("WEST","",[team_dic[team] for team in teamsWest],[],[],
+#                  team_dic)
+#group_WEST.print_leaderboard() 
